@@ -1,4 +1,4 @@
-package teh.dev.companyportal.providers;
+package teh.dev.companyportal.application.providers;
 
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
