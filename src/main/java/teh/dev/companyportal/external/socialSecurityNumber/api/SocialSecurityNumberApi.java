@@ -18,7 +18,6 @@ public class SocialSecurityNumberApi {
                     .socialSecurityNumber(socialSecurityNumber)
                 .build();
 
-
             return Response
                     .status(Response.Status.OK)
                     .entity(person)

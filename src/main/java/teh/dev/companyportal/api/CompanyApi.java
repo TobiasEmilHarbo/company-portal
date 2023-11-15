@@ -37,25 +37,6 @@ public class CompanyApi {
                 .build();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createCompany(
-            @RequestBody() AddCompanyRequestBody requestBody
-    ) {
-        CompanyData companyData = CompanyData.builder()
-                .name(requestBody.getName())
-                .country(requestBody.getCountry())
-                .phoneNumber(requestBody.getPhoneNumber())
-                .ownerIds(requestBody.getOwnerIds())
-                .build();
-
-        Company company = companyService.createCompany(companyData);
-
-        return Response.ok()
-                .entity(company)
-                .build();
-    }
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/")
@@ -78,6 +59,66 @@ public class CompanyApi {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    public Response createCompany(
+            @RequestBody() AddCompanyRequestBody requestBody
+    ) {
+        CompanyData companyData = CompanyData.builder()
+                .name(requestBody.getName())
+                .country(requestBody.getCountry())
+                .phoneNumber(requestBody.getPhoneNumber())
+                .ownerIds(requestBody.getOwnerIds())
+                .build();
+
+        Company company = companyService.createCompany(companyData);
+
+        return Response.ok()
+                .entity(company)
+                .build();
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/")
+    public Response updateCompany(
+            @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId,
+            @RequestBody() AddCompanyRequestBody requestBody
+    ) {
+        Company companyData = Company.builder()
+                .id(companyId)
+                .name(requestBody.getName())
+                .country(requestBody.getCountry())
+                .phoneNumber(requestBody.getPhoneNumber())
+                .ownerIds(requestBody.getOwnerIds())
+                .build();
+
+        Company company = companyService.updateCompany(companyId, companyData);
+
+        return Response.ok()
+                .entity(company)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/owners/")
+    public Response getOwners(
+            @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId) {
+        List<Owner> owners = companyService.getOwnersOfCompany(companyId);
+
+        if(Objects.isNull(owners)) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity("Company not found.")
+                    .build();
+        }
+
+        return Response.ok()
+                .entity(owners)
+                .build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/owners/")
     public Response addOwner(
             @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId,
@@ -85,7 +126,7 @@ public class CompanyApi {
         Owner owner;
 
         try {
-            owner = companyService.addOwner(companyId, requestBody.getSocialSecurityNumber());
+            owner = companyService.addOwnerToCompany(companyId, requestBody.getSocialSecurityNumber());
         } catch (CompanyNotFoundException e) {
             return Response
                     .status(Response.Status.NOT_FOUND)
@@ -95,8 +136,8 @@ public class CompanyApi {
 
         if(Objects.isNull(owner)) {
             return Response
-                    .noContent()
                     .status(Response.Status.BAD_REQUEST)
+                    .entity("Social security number is invalid.")
                     .build();
         }
 

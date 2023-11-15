@@ -92,16 +92,16 @@ public class MemoryDataStore implements DataStore {
     }
 
     @Override
-    public Company updateCompany(String companyId, Company companyData) {
+    public Company updateCompany(String companyId, Company company) {
 
         LocalDateTime updateDate = LocalDateTime.now();
 
         CompanyEntity companyEntity = this.companyStore.get(companyId);
 
-        companyEntity.setName(companyData.getName());
-        companyEntity.setCountry(companyData.getCountry());
-        companyEntity.setPhoneNumber(companyData.getPhoneNumber());
-        companyEntity.setOwnerIds(companyData.getOwnerIds());
+        companyEntity.setName(company.getName());
+        companyEntity.setCountry(company.getCountry());
+        companyEntity.setPhoneNumber(company.getPhoneNumber());
+        companyEntity.setOwnerIds(company.getOwnerIds());
         companyEntity.setUpdated(updateDate);
 
         return this.getCompany(companyId);

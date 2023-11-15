@@ -1,6 +1,5 @@
 package teh.dev.companyportal.domain.services;
 
-import jakarta.ws.rs.WebApplicationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class CompanyService {
         return dataStore.createCompany(companyData);
     }
 
-    public Owner addOwner(String companyId, String ownerSocialSecurityNumber) throws CompanyNotFoundException {
+    public Owner addOwnerToCompany(String companyId, String ownerSocialSecurityNumber) throws CompanyNotFoundException {
         Company company = dataStore.getCompany(companyId);
 
         if(Objects.isNull(company)) {
@@ -49,6 +48,10 @@ public class CompanyService {
 
         List<String> ownerIds = new ArrayList<>(company.getOwnerIds());
 
+        if(ownerIds.contains(owner.getId())) {
+            return owner;
+        }
+
         ownerIds.add(owner.getId());
 
         company.setOwnerIds(ownerIds);
@@ -56,5 +59,22 @@ public class CompanyService {
         dataStore.updateCompany(companyId, company);
 
         return owner;
+    }
+
+    public Company updateCompany(String companyId, Company companyData) {
+        dataStore.updateCompany(companyId, companyData);
+        return dataStore.getCompany(companyId);
+    }
+
+    public List<Owner> getOwnersOfCompany(String companyId) {
+        Company company = dataStore.getCompany(companyId);
+
+        if(Objects.isNull(company)) {
+            return null;
+        }
+
+        return company.getOwnerIds()
+                .stream()
+                .map(dataStore::getOwnerById).toList();
     }
 }
