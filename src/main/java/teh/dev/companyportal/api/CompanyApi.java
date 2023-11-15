@@ -6,8 +6,12 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import teh.dev.companyportal.api.models.AddCompanyRequestBody;
+import teh.dev.companyportal.api.models.AddOwnerRequestBody;
+import teh.dev.companyportal.domain.exceptions.CompanyNotFoundException;
 import teh.dev.companyportal.domain.models.Company;
 import teh.dev.companyportal.domain.models.CompanyData;
+import teh.dev.companyportal.domain.models.Owner;
 import teh.dev.companyportal.domain.services.CompanyService;
 
 import java.util.List;
@@ -36,8 +40,15 @@ public class CompanyApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCompany(
-            @RequestBody() CompanyData companyData
+            @RequestBody() AddCompanyRequestBody requestBody
     ) {
+        CompanyData companyData = CompanyData.builder()
+                .name(requestBody.getName())
+                .country(requestBody.getCountry())
+                .phoneNumber(requestBody.getPhoneNumber())
+                .ownerIds(requestBody.getOwnerIds())
+                .build();
+
         Company company = companyService.createCompany(companyData);
 
         return Response.ok()
@@ -62,6 +73,35 @@ public class CompanyApi {
 
         return Response.ok()
                 .entity(company)
+                .build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/owners/")
+    public Response addOwner(
+            @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId,
+            @RequestBody() AddOwnerRequestBody requestBody) {
+        Owner owner;
+
+        try {
+            owner = companyService.addOwner(companyId, requestBody.getSocialSecurityNumber());
+        } catch (CompanyNotFoundException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        }
+
+        if(Objects.isNull(owner)) {
+            return Response
+                    .noContent()
+                    .status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+
+        return Response.ok()
+                .entity(owner)
                 .build();
     }
 }
