@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static teh.dev.companyportal.api.ParameterConstants.COMPANY_ID_PATH_PARAMETER;
+import static teh.dev.companyportal.domain.exceptions.ErrorMessage.COMPANY_NOT_FOUND;
+import static teh.dev.companyportal.domain.exceptions.ErrorMessage.INVALID_SOCIAL_SECURITY_NUMBER;
 
 @Service
 @Path("companies")
@@ -29,7 +31,7 @@ public class CompanyApi {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCompanies() {
-
+        // TODO: implement pagination
         List<Company> companies = companyService.getCompanies();
 
         return Response.ok()
@@ -103,12 +105,13 @@ public class CompanyApi {
     @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/owners/")
     public Response getOwners(
             @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId) {
+        // TODO: implement pagination
         List<Owner> owners = companyService.getOwnersOfCompany(companyId);
 
         if(Objects.isNull(owners)) {
             return Response
                     .status(Response.Status.NOT_FOUND)
-                    .entity("Company not found.")
+                    .entity(COMPANY_NOT_FOUND)
                     .build();
         }
 
@@ -137,7 +140,7 @@ public class CompanyApi {
         if(Objects.isNull(owner)) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity("Social security number is invalid.")
+                    .entity(INVALID_SOCIAL_SECURITY_NUMBER)
                     .build();
         }
 

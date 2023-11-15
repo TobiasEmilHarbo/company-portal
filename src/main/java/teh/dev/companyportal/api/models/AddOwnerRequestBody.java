@@ -1,11 +1,11 @@
 package teh.dev.companyportal.api.models;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddOwnerRequestBody {
-    private String name;
     private String socialSecurityNumber;
 }
