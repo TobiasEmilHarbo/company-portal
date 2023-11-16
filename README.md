@@ -6,6 +6,9 @@ This application contains to APIs:
 - One for creating, listing and manipulation companies and the relationship with owners
 - One for validating a social security number
 
+## Authors
+Tobias Emil Harbo (tobiasharbo@gmail.com)
+
 ## Get started
 To run the application with docker run the following commands in the project directory:
 
@@ -28,11 +31,28 @@ This project is structured with inspiration from Domain Driven Design and contai
 
 ## API Requests
 
+Authorization is simulated with a `role` header. Three roles are defined:
+
+`GUEST` (default) role allows user to:
+- list companies
+- view company details
+- check social security number
+
+`ADMIN` role allows user to:
+- create a company
+- do what `GUEST` role can
+
+`OWNER` role allows user to:
+- add owners to company
+- view owner details
+- update company
+- do what `GUEST` role can
+
 ### List all companies
-> curl --location 'http://localhost:8080/companies/'
+> curl --location --request GET 'http://localhost:8080/companies/'
 
 ### Create new company
-> curl --location 'http://localhost:8080/companies/' \
+> curl --location --request POST 'http://localhost:8080/companies/' \
 > --header 'Content-Type: application/json' \
 > --header 'role: ADMIN' \
 > --data '{
@@ -43,7 +63,7 @@ This project is structured with inspiration from Domain Driven Design and contai
 > }'
 
 ### View one company
-> curl --location 'http://localhost:8080/companies/{:company-id}'
+> curl --location --request GET 'http://localhost:8080/companies/{:company-id}'
 
 ### Update one company
 > curl --location --request PUT 'http://localhost:8080/companies/{:company-id}' \
@@ -59,11 +79,11 @@ This project is structured with inspiration from Domain Driven Design and contai
 > }'
 
 ### List owner detail of company
-> curl --location 'http://localhost:8080/companies/{:company-id}/owners' \
+> curl --location --request GET 'http://localhost:8080/companies/{:company-id}/owners' \
 > --header 'role: OWNER'
 
 ### Add owner to company
-> curl --location 'http://localhost:8080/companies/{:company-id}/owners' \
+> curl --location --request POST 'http://localhost:8080/companies/{:company-id}/owners' \
 > --header 'Content-Type: application/json' \
 > --header 'role: OWNER' \
 > --data '{
@@ -71,7 +91,7 @@ This project is structured with inspiration from Domain Driven Design and contai
 > }'
 
 ### Create social security number checker
-> curl --location 'http://localhost:8080/social-security-number-checkers/' \
+> curl --location --request POST 'http://localhost:8080/social-security-number-checkers/' \
 > --header 'Content-Type: application/json' \
 > --data '{
 "socialSecurityNumber": "12345678"
