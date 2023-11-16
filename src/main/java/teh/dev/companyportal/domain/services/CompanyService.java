@@ -7,6 +7,7 @@ import teh.dev.companyportal.domain.exceptions.CompanyNotFoundException;
 import teh.dev.companyportal.domain.models.Company;
 import teh.dev.companyportal.domain.models.CompanyData;
 import teh.dev.companyportal.domain.models.Owner;
+import teh.dev.companyportal.domain.models.Role;
 import teh.dev.companyportal.external.database.MemoryDataStore;
 
 import java.util.ArrayList;
@@ -75,5 +76,33 @@ public class CompanyService {
         return company.getOwnerIds()
                 .stream()
                 .map(dataStore::getOwnerById).toList();
+    }
+
+    /**
+     * Should simulate a check to see, if the current logged in user has permission to do this action
+     */
+    public boolean canViewCompanyOwnerDetails(Role role) {
+         return role.equals(Role.OWNER);
+    }
+
+    /**
+     * Should simulate a check to see, if the current logged in user has permission to do this action
+     */
+    public boolean canAddOwner(Role role) {
+        return role.equals(Role.OWNER);
+    }
+
+    /**
+     * Should simulate a check to see, if the current logged in user has permission to do this action
+     */
+    public boolean canUpdateCompany(Role role) {
+        return role.equals(Role.OWNER);
+    }
+
+    /**
+     * Should simulate a check to see, if the current logged in user has permission to do this action
+     */
+    public boolean canCreateNewCompany(Role role) {
+        return role.equals(Role.ADMIN);
     }
 }

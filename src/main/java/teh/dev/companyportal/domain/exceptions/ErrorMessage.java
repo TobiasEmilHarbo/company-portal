@@ -8,7 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorMessage {
     COMPANY_NOT_FOUND("Company not found."),
-    INVALID_SOCIAL_SECURITY_NUMBER("Social security number is invalid.");
+    INVALID_SOCIAL_SECURITY_NUMBER("Social security number is invalid."),
+    RESOURCE_PERMISSION_MISSING("You do not have permission to access this resource.");
 
     @JsonValue
     private final String value;

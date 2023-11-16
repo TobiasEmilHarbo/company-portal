@@ -12,14 +12,15 @@ import teh.dev.companyportal.domain.exceptions.CompanyNotFoundException;
 import teh.dev.companyportal.domain.models.Company;
 import teh.dev.companyportal.domain.models.CompanyData;
 import teh.dev.companyportal.domain.models.Owner;
+import teh.dev.companyportal.domain.models.Role;
 import teh.dev.companyportal.domain.services.CompanyService;
 
 import java.util.List;
 import java.util.Objects;
 
 import static teh.dev.companyportal.api.ParameterConstants.COMPANY_ID_PATH_PARAMETER;
-import static teh.dev.companyportal.domain.exceptions.ErrorMessage.COMPANY_NOT_FOUND;
-import static teh.dev.companyportal.domain.exceptions.ErrorMessage.INVALID_SOCIAL_SECURITY_NUMBER;
+import static teh.dev.companyportal.api.ParameterConstants.ROLE_HEADER_PARAMETER;
+import static teh.dev.companyportal.domain.exceptions.ErrorMessage.*;
 
 @Service
 @Path("companies")
@@ -31,6 +32,7 @@ public class CompanyApi {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCompanies() {
+
         // TODO: implement pagination
         List<Company> companies = companyService.getCompanies();
 
@@ -62,8 +64,18 @@ public class CompanyApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCompany(
+            @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role,
             @RequestBody() AddCompanyRequestBody requestBody
     ) {
+        boolean canCreateNewCompany = companyService.canCreateNewCompany(role);
+
+        if(!canCreateNewCompany) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity(RESOURCE_PERMISSION_MISSING)
+                    .build();
+        }
+
         CompanyData companyData = CompanyData.builder()
                 .name(requestBody.getName())
                 .country(requestBody.getCountry())
@@ -83,8 +95,19 @@ public class CompanyApi {
     @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/")
     public Response updateCompany(
             @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId,
+            @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role,
             @RequestBody() AddCompanyRequestBody requestBody
     ) {
+
+        boolean canUpdateCompany = companyService.canUpdateCompany(role);
+
+        if(!canUpdateCompany) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity(RESOURCE_PERMISSION_MISSING)
+                    .build();
+        }
+
         Company companyData = Company.builder()
                 .id(companyId)
                 .name(requestBody.getName())
@@ -104,8 +127,20 @@ public class CompanyApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/owners/")
     public Response getOwners(
-            @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId) {
+            @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId,
+            @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role) {
+
         // TODO: implement pagination
+
+        boolean canViewOwnerDetails = companyService.canViewCompanyOwnerDetails(role);
+
+        if(!canViewOwnerDetails) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity(RESOURCE_PERMISSION_MISSING)
+                    .build();
+        }
+
         List<Owner> owners = companyService.getOwnersOfCompany(companyId);
 
         if(Objects.isNull(owners)) {
@@ -125,7 +160,18 @@ public class CompanyApi {
     @Path("/{" + COMPANY_ID_PATH_PARAMETER + "}/owners/")
     public Response addOwner(
             @PathParam(COMPANY_ID_PATH_PARAMETER) String companyId,
-            @RequestBody() AddOwnerRequestBody requestBody) {
+            @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role,
+            @RequestBody() AddOwnerRequestBody requestBody
+            ) {
+        boolean canAddOwner = companyService.canAddOwner(role);
+
+        if(!canAddOwner) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity(RESOURCE_PERMISSION_MISSING)
+                    .build();
+        }
+
         Owner owner;
 
         try {
