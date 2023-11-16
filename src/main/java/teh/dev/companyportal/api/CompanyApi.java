@@ -34,6 +34,7 @@ public class CompanyApi {
     public Response getCompanies() {
 
         // TODO: implement pagination
+
         List<Company> companies = companyService.getCompanies();
 
         return Response.ok()
@@ -67,6 +68,8 @@ public class CompanyApi {
             @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role,
             @RequestBody() AddCompanyRequestBody requestBody
     ) {
+        // TODO: Add input validation
+
         boolean canCreateNewCompany = companyService.canCreateNewCompany(role);
 
         if(!canCreateNewCompany) {
@@ -98,6 +101,7 @@ public class CompanyApi {
             @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role,
             @RequestBody() AddCompanyRequestBody requestBody
     ) {
+        // TODO: Add input validation
 
         boolean canUpdateCompany = companyService.canUpdateCompany(role);
 
@@ -163,6 +167,8 @@ public class CompanyApi {
             @HeaderParam(ROLE_HEADER_PARAMETER) @DefaultValue("GUEST") Role role,
             @RequestBody() AddOwnerRequestBody requestBody
             ) {
+        // TODO: Add input validation
+
         boolean canAddOwner = companyService.canAddOwner(role);
 
         if(!canAddOwner) {

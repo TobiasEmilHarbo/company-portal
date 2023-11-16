@@ -12,6 +12,13 @@ import teh.dev.companyportal.api.models.CheckSocialSecurityNumberRequestBody;
 import teh.dev.companyportal.domain.models.SocialSecurityNumberChecker;
 import teh.dev.companyportal.domain.services.SocialSecurityNumberService;
 
+/**
+ * This API has only one resource allowing for checking if a social security number is "valid".
+ * This endpoint does not really belong to this service and should be moved to a dedicated service.
+ *
+ * In line with REST API guidelines provided by zalando.com this endpoint is designed as a resource rather than an action:
+ * https://opensource.zalando.com/restful-api-guidelines/#hypermedia
+ */
 @Service
 @Path("social-security-number-checkers")
 @RequiredArgsConstructor
