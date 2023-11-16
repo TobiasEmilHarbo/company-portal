@@ -15,7 +15,16 @@ To run the application with docker run the following commands in the project dir
 > 
 > docker run -p 8080:8080 company-portal .
 
+## Project structure
+This project is structured with inspiration from Domain Driven Design and contains four main packages:
 
+`application` package containing application specific needed for setup such as API registration
+
+`api` package contains all APIs exposed to the consumer of this application. 
+
+`domain` package contains all business logic through services handling different user scenarios.
+
+`external` package contains all logic which is not directly described by the domain such as external API services and data storage
 
 ## API Requests
 
