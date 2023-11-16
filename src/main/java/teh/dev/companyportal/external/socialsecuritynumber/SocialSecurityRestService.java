@@ -1,10 +1,10 @@
-package teh.dev.companyportal.external.socialSecurityNumber;
+package teh.dev.companyportal.external.socialsecuritynumber;
 
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teh.dev.companyportal.external.socialSecurityNumber.api.SocialSecurityNumberApi;
-import teh.dev.companyportal.external.socialSecurityNumber.api.models.Person;
+import teh.dev.companyportal.external.socialsecuritynumber.api.SocialSecurityNumberApi;
+import teh.dev.companyportal.external.socialsecuritynumber.api.models.Person;
 
 @Service
 @RequiredArgsConstructor

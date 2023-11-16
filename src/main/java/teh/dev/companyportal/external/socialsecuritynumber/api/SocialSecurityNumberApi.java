@@ -1,10 +1,10 @@
-package teh.dev.companyportal.external.socialSecurityNumber.api;
+package teh.dev.companyportal.external.socialsecuritynumber.api;
 
 import com.github.javafaker.Faker;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import teh.dev.companyportal.external.socialSecurityNumber.api.models.Person;
+import teh.dev.companyportal.external.socialsecuritynumber.api.models.Person;
 
 import java.util.Locale;
 
@@ -14,6 +14,7 @@ public class SocialSecurityNumberApi {
     public Response getPerson(String socialSecurityNumber) {
         Faker faker = new Faker(Locale.of("da-DK"));
 
+        // generates a random value of either true or false to simulate a validation check
         boolean isValueSocialSecurityNumber = faker.random().nextBoolean();
 
         if(isValueSocialSecurityNumber) {

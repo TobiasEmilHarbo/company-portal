@@ -2,8 +2,8 @@ package teh.dev.companyportal.domain.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import teh.dev.companyportal.external.socialSecurityNumber.SocialSecurityRestService;
-import teh.dev.companyportal.external.socialSecurityNumber.api.models.Person;
+import teh.dev.companyportal.external.socialsecuritynumber.SocialSecurityRestService;
+import teh.dev.companyportal.external.socialsecuritynumber.api.models.Person;
 
 import java.util.Objects;
 

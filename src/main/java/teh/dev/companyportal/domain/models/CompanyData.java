@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Represents the raw data of a company
+ */
 @Data
 @Builder
 public class CompanyData {

@@ -1,6 +1,5 @@
 package teh.dev.companyportal.external.database;
 
-import com.github.javafaker.Company;
 import com.github.javafaker.Faker;
 import org.springframework.stereotype.Service;
 import teh.dev.companyportal.domain.models.CompanyData;
@@ -12,8 +11,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 @Service
-public class DataGenerator {
-    private Faker faker = new Faker(Locale.of("da-DK"));
+public class DataGeneratorService {
+    private final Faker faker = new Faker(Locale.of("da-DK"));
 
     public String generateId() {
         return UUID.randomUUID().toString();

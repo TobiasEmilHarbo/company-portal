@@ -1,4 +1,4 @@
-package teh.dev.companyportal.external.socialSecurityNumber.api.models;
+package teh.dev.companyportal.external.socialsecuritynumber.api.models;
 
 import lombok.*;
 

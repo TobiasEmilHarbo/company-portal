@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import teh.dev.companyportal.domain.models.Owner;
 import teh.dev.companyportal.domain.models.OwnerData;
 import teh.dev.companyportal.external.database.MemoryDataStore;
-import teh.dev.companyportal.external.socialSecurityNumber.SocialSecurityRestService;
-import teh.dev.companyportal.external.socialSecurityNumber.api.models.Person;
+import teh.dev.companyportal.external.socialsecuritynumber.SocialSecurityRestService;
+import teh.dev.companyportal.external.socialsecuritynumber.api.models.Person;
 
 import java.util.Objects;
 

@@ -14,21 +14,21 @@ import java.util.*;
 @Service
 public class MemoryDataStore implements DataStore {
 
-    private final DataGenerator dataGenerator;
+    private final DataGeneratorService dataGeneratorService;
     private final Map<String, OwnerEntity> ownerStore;
     private final Map<String, CompanyEntity> companyStore;
 
-    public MemoryDataStore(DataGenerator dataGenerator) {
-        this.dataGenerator = dataGenerator;
+    public MemoryDataStore(DataGeneratorService dataGeneratorService) {
+        this.dataGeneratorService = dataGeneratorService;
 
         this.ownerStore = new HashMap<>();
         this.companyStore = new HashMap<>();
 
-        OwnerData ownerData = dataGenerator.generateOwnerData();
+        OwnerData ownerData = dataGeneratorService.generateOwnerData();
         Owner owner = this.createOwner(ownerData);
 
-        CompanyData companyDataOne = dataGenerator.generateCompanyData();
-        CompanyData companyDataTwo = dataGenerator.generateCompanyData();
+        CompanyData companyDataOne = dataGeneratorService.generateCompanyData();
+        CompanyData companyDataTwo = dataGeneratorService.generateCompanyData();
 
         companyDataOne.setOwnerIds(List.of(owner.getId()));
         companyDataTwo.setOwnerIds(List.of(owner.getId()));
@@ -68,8 +68,8 @@ public class MemoryDataStore implements DataStore {
 
     @Override
     public Company createCompany(CompanyData company) {
-        String id = dataGenerator.generateId();
-        LocalDateTime createDate = dataGenerator.getCurrentLocalDateTime();
+        String id = dataGeneratorService.generateId();
+        LocalDateTime createDate = dataGeneratorService.getCurrentLocalDateTime();
 
         CompanyEntity entity = CompanyEntity.builder()
                 .id(id)
@@ -89,7 +89,7 @@ public class MemoryDataStore implements DataStore {
     @Override
     public Company updateCompany(String companyId, Company company) {
 
-        LocalDateTime updateDate = dataGenerator.getCurrentLocalDateTime();
+        LocalDateTime updateDate = dataGeneratorService.getCurrentLocalDateTime();
 
         CompanyEntity companyEntity = this.companyStore.get(companyId);
 
@@ -104,8 +104,8 @@ public class MemoryDataStore implements DataStore {
 
     @Override
     public Owner createOwner(OwnerData owner) {
-        String id = dataGenerator.generateId();
-        LocalDateTime createDate = dataGenerator.getCurrentLocalDateTime();
+        String id = dataGeneratorService.generateId();
+        LocalDateTime createDate = dataGeneratorService.getCurrentLocalDateTime();
 
         OwnerEntity entity = OwnerEntity.builder()
                 .id(id)
