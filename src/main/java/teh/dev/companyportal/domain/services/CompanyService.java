@@ -61,9 +61,8 @@ public class CompanyService {
         return owner;
     }
 
-    public Company updateCompany(String companyId, Company companyData) {
-        dataStore.updateCompany(companyId, companyData);
-        return dataStore.getCompany(companyId);
+    public Company updateCompany(String companyId, Company company) {
+        return dataStore.updateCompany(companyId, company);
     }
 
     public List<Owner> getOwnersOfCompany(String companyId) {

@@ -36,6 +36,6 @@ public class OwnerService {
                 .socialSecurityNumber(person.getSocialSecurityNumber())
                 .build();
 
-        return memoryDataStore.registerOwner(ownerData);
+        return memoryDataStore.createOwner(ownerData);
     }
 }

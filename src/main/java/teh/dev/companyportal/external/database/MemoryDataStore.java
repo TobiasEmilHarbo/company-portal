@@ -1,6 +1,5 @@
 package teh.dev.companyportal.external.database;
 
-import com.github.javafaker.Faker;
 import org.springframework.stereotype.Service;
 import teh.dev.companyportal.domain.models.Company;
 import teh.dev.companyportal.domain.models.CompanyData;
@@ -14,32 +13,28 @@ import java.util.*;
 
 @Service
 public class MemoryDataStore implements DataStore {
+
+    private final DataGenerator dataGenerator;
     private final Map<String, OwnerEntity> ownerStore;
     private final Map<String, CompanyEntity> companyStore;
 
-    public MemoryDataStore() {
-        Faker faker = new Faker(Locale.of("da-DK"));
+    public MemoryDataStore(DataGenerator dataGenerator) {
+        this.dataGenerator = dataGenerator;
 
         this.ownerStore = new HashMap<>();
-
-        int socialSecurityNumber = faker.number().numberBetween(8, 8);
-        String name = faker.name().name();
-
         this.companyStore = new HashMap<>();
 
-        this.createCompany(CompanyData.builder()
-                .name(faker.company().name())
-                .phoneNumber(faker.phoneNumber().cellPhone())
-                .country("DK")
-                .ownerIds(List.of())
-                .build());
+        OwnerData ownerData = dataGenerator.generateOwnerData();
+        Owner owner = this.createOwner(ownerData);
 
-        this.createCompany(CompanyData.builder()
-                .name(faker.company().name())
-                .phoneNumber(faker.phoneNumber().cellPhone())
-                .country("DK")
-                .ownerIds(List.of())
-                .build());
+        CompanyData companyDataOne = dataGenerator.generateCompanyData();
+        CompanyData companyDataTwo = dataGenerator.generateCompanyData();
+
+        companyDataOne.setOwnerIds(List.of(owner.getId()));
+        companyDataTwo.setOwnerIds(List.of(owner.getId()));
+
+        this.createCompany(companyDataOne);
+        this.createCompany(companyDataTwo);
     }
 
     @Override
@@ -73,8 +68,8 @@ public class MemoryDataStore implements DataStore {
 
     @Override
     public Company createCompany(CompanyData company) {
-        String id = UUID.randomUUID().toString();
-        LocalDateTime createDate = LocalDateTime.now();
+        String id = dataGenerator.generateId();
+        LocalDateTime createDate = dataGenerator.getCurrentLocalDateTime();
 
         CompanyEntity entity = CompanyEntity.builder()
                 .id(id)
@@ -94,7 +89,7 @@ public class MemoryDataStore implements DataStore {
     @Override
     public Company updateCompany(String companyId, Company company) {
 
-        LocalDateTime updateDate = LocalDateTime.now();
+        LocalDateTime updateDate = dataGenerator.getCurrentLocalDateTime();
 
         CompanyEntity companyEntity = this.companyStore.get(companyId);
 
@@ -108,9 +103,9 @@ public class MemoryDataStore implements DataStore {
     }
 
     @Override
-    public Owner registerOwner(OwnerData owner) {
-        String id = UUID.randomUUID().toString();
-        LocalDateTime createDate = LocalDateTime.now();
+    public Owner createOwner(OwnerData owner) {
+        String id = dataGenerator.generateId();
+        LocalDateTime createDate = dataGenerator.getCurrentLocalDateTime();
 
         OwnerEntity entity = OwnerEntity.builder()
                 .id(id)
